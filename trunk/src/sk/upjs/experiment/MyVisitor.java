@@ -20,16 +20,16 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	public void visit(ForStmt n, TokenList arg) {
 
 		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.FOR);
 		arg.addToken(tok);		
 		
 		super.visit(n, arg);
 		
 		Token tok2 = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.FOR_END);
 		arg.addToken(tok2);	
 	}
@@ -38,16 +38,16 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	public void visit(BlockStmt n, TokenList arg) {
 		
 		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.BLOCK);
 		arg.addToken(tok);
 		
 		super.visit(n, arg);
 		
 		Token tok2 = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.BLOCK_END);
 		arg.addToken(tok2);
 		
@@ -56,8 +56,8 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	public void visit(VariableDeclarationExpr n, TokenList arg){
 		
 		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.VARIABLE_DECLARATION);
 		arg.addToken(tok);
 		
@@ -66,9 +66,9 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	
 	public void visit(AssignExpr n, TokenList arg) {
 		
-		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+		Token tok = new Token(n.getBeginLine(), n.getEndLine()-1,
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.ASSIGNMENT);
 		arg.addToken(tok);
 		
@@ -78,16 +78,16 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	public void visit(MethodDeclaration n, TokenList arg) {
 		
 		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.METHOD_DECLARATION);
 		arg.addToken(tok);
 		
 		super.visit(n, arg);
 		
 		Token tok2 = new Token(n.getBeginLine(), n.getEndLine(),
-				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn(),
-				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
+				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
+				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
 				MyTokens.METHOD_DECLARATION_END);
 		arg.addToken(tok2);
 	}
