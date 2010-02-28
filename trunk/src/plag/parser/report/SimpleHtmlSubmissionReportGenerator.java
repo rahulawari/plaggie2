@@ -489,9 +489,9 @@ public class SimpleHtmlSubmissionReportGenerator
 
 	StringBuffer fileContents = new StringBuffer(10000);
 	
-	String line;
-	while ( (line = br.readLine()) != null) {
-	    fileContents.append(line+"\n");
+	int fileChar;
+	while ( (fileChar = br.read()) != -1) {
+	    fileContents.append((char)fileChar);
 	}
 	br.close();
 	return fileContents;
@@ -517,7 +517,6 @@ public class SimpleHtmlSubmissionReportGenerator
 			     int multiLineThreshold) 
 	throws IOException 
     {
-
 	out.println("<HTML>");
 	out.println("<HEAD></HEAD>");
 	out.println("<BODY>");
