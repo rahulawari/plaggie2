@@ -36,6 +36,7 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 		arg.addToken(tok);		
 		
 		pocetVnoreni++;
+		
 		System.out.println("Vnorenie "+pocetVnoreni);
 		super.visit(n, arg);
 		
@@ -110,6 +111,9 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn(),
 				MyTokens.METHOD_DECLARATION);
 		arg.addToken(tok);
+		
+		System.out.println("Riadok " + n.getBeginLine());
+		System.out.println("Stlpec " + n.getBeginColumn());
 		metody.add(n);
 		
 		if (vnarajDoMetod)
