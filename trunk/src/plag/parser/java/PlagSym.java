@@ -20,6 +20,7 @@
  */
 package plag.parser.java;
 
+import plag.parser.SimpleToken;
 import plag.parser.TokenList;
 import plag.parser.Token;
 import java.io.*;
@@ -97,7 +98,7 @@ public class PlagSym {
 	int lineLeft = getLineNumber(leftChar);
 	int lineRight = getLineNumber(rightChar);
 
-	Token t = new Token(lineLeft, lineRight, leftChar, rightChar, value);
+	Token t = new SimpleToken(lineLeft, lineRight, leftChar, rightChar, valueStrings[value], value);
 
 	tokens.addToken(t);
 	

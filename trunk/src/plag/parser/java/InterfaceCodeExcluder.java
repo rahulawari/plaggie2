@@ -54,7 +54,8 @@ public class InterfaceCodeExcluder
     {
 	boolean curMark = false;
 	for (int i = 0; i < tokensA.size(); i++) {
-	    int value = tokensA.getToken(i).getValue();
+	    //int value = tokensA.getToken(i).getValue();
+		int value = 0;
 	    if (curMark)
 		marksA[i] = true;
 	    if (value == PlagSym.INTERFACE_DECLARATION) {
@@ -73,7 +74,8 @@ public class InterfaceCodeExcluder
 
 	curMark = false;
 	for (int i = 0; i < tokensB.size(); i++) {
-	    int value = tokensB.getToken(i).getValue();
+	    //int value = tokensB.getToken(i).getValue();
+		int value = 0;
 	    if (curMark) {
 		marksB[i] = true;
 		try {

@@ -539,13 +539,12 @@ public class SimpleHtmlSubmissionReportGenerator
 	    int lineRight = t.getEndLine();
 	    int leftChar = t.getStartChar();
 	    int rightChar = t.getEndChar();
-	    int value = t.getValue();
 
 	    //	    if (printLineNumbers) {
 	    ps += lineLeft+"("+leftChar+")-"+
 		lineRight+"("+rightChar+"):";
 	    //	    }
-	    ps += codeTokenizer.getValueString(value);
+	    ps += t.getTokenCategory();
 	    //	    if (printLineNumbers) {
 	    ps += ":";
 	    //	    }
