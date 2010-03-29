@@ -83,9 +83,9 @@ public class MyTokens {
 	int lineLeft = getLineNumber(leftChar);
 	int lineRight = getLineNumber(rightChar);
 
-	Token t = new Token(lineLeft, lineRight, leftChar, rightChar, value);
+	//Token t = new Token(lineLeft, lineRight, leftChar, rightChar, value);
 
-	tokens.addToken(t);
+	//tokens.addToken(t);
 	
     }
 
