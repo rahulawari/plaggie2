@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configurations>
+
+    <methodInvocationName>true</methodInvocationName>
+    <methodInvocationObject>true</methodInvocationObject>
+    <methodPairing>true</methodPairing>    
+    <methodName>prva_metoda</methodName>
+    <methodName>druha_metoda</methodName> 
+ 
+</configurations>
