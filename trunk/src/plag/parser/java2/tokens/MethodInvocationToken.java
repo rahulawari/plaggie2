@@ -1,4 +1,6 @@
-package plag.parser;
+package plag.parser.java2.tokens;
+
+import plag.parser.SimpleToken;
 
 public class MethodInvocationToken extends SimpleToken {
 

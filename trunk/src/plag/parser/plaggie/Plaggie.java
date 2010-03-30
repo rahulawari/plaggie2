@@ -619,8 +619,9 @@ public class Plaggie
 	    }
 	    
 	    // -- Create the code tokenizer object for parsing the source code files
-	    codeTokenizer = (CodeTokenizer)Class.forName(config.codeTokenizer).newInstance();
-
+	    codeTokenizer = (CodeTokenizer)Class.forName(config.codeTokenizer).newInstance();   
+	    // -- Instruct the code tokenizer to read and accept the Plaggie configuration settings
+	    codeTokenizer.acceptSystemConfiguration(config);
 
 	    // -- Read and create the submissions, if the results are not
 	    // -- read from a file
