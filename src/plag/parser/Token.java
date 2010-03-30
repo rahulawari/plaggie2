@@ -42,6 +42,9 @@ public abstract class Token implements Serializable {
 	/** The name of the token category for reporting, e.g. assigment statetment, method call, etc.*/
 	private String tokenCategory;
 	
+	/** The number used as a token marker for distinguishing tokens of different code parts. 0 means no marker used. */
+	protected int markerNumber = 0;
+		
 	/**
 	 * Creates a new token (old)
 	 * 

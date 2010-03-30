@@ -100,7 +100,7 @@ public class SimpleTokenSimilarityChecker implements TokenSimilarityChecker {
 									&& ((b + j) < tokensB.size())
 									&& (!marksA[a + j])
 									&& (!marksB[b + j])
-									&& (tokensA.getToken(a + j).equals(tokensB.getToken(b + j)))) j++;
+									&& (tokensA.getToken(a + j).equals(tokensB.getToken(b + j)))) j++; 
 						
 							if (j == maxMatch) {
 								Debug.println(this,

@@ -3,6 +3,7 @@ package sk.upjs.experiment;
 
 import plag.parser.CodeTokenizer;
 import plag.parser.TokenList;
+import plag.parser.plaggie.Configuration;
 
 import sk.upjs.experiment.MyVisitor;
 
@@ -19,6 +20,11 @@ public class MyFirstTokenizer
     implements CodeTokenizer
 {
 
+	@Override
+	public void acceptSystemConfiguration(Configuration config) {
+			
+	}
+	
     public MyFirstTokenizer()
     {
     }

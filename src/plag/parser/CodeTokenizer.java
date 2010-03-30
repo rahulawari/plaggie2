@@ -22,17 +22,14 @@ package plag.parser;
 
 import java.io.File;
 
+import plag.parser.plaggie.Configuration;
+
 /**
  * An interface representing a tokenizer for program code.
  */
 public interface CodeTokenizer
 {
-
-    public TokenList tokenize(File file)
-	throws Exception;
-
-    /**
-     * Returns a string representation of the token, which has code value
-     */
-    public String getValueString(int value);
+    public TokenList tokenize(File file) throws Exception;
+    
+    public void acceptSystemConfiguration(Configuration config);
 }

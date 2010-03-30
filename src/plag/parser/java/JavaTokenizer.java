@@ -24,6 +24,7 @@ import plag.parser.CodeTokenizer;
 import plag.parser.TokenList;
 
 import plag.parser.java.lex.Lexer;
+import plag.parser.plaggie.Configuration;
 
 import java.io.*;
 
@@ -35,6 +36,12 @@ public class JavaTokenizer
     implements CodeTokenizer
 {
 
+	@Override
+	public void acceptSystemConfiguration(Configuration config) {
+		// TODO Auto-generated method stub
+		
+	}
+	
     public JavaTokenizer()
     {
     }
