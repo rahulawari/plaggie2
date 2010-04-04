@@ -35,10 +35,10 @@ public class SourceFileReader {
 	}
 	
 	public String getLine(int lineNr) {
-		return "";
+		return lines.get(lineNr-1);
 	}
 	
 	public int getCharPos(int line, int column) {
-		return 0;
+		return lineStarts[line-1]+column-1;
 	}
 }
