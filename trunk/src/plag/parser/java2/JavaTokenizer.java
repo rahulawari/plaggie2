@@ -2,6 +2,7 @@ package plag.parser.java2;
 
 import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.expr.SuperExpr;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +24,12 @@ public class JavaTokenizer implements CodeTokenizer {
 	@Override
 	public void acceptSystemConfiguration(Configuration config) {
 		// z configu sa vyberie cesta k submission dir, alebo sa tam prida dalsia property s nazvom konfiguracneho suboru
-		// config.loadFromFile(...);
+		if(config.submissionDirectory.equalsIgnoreCase("")) {
+			this.config.loadFromFile(config.configFilePath+"\\config.xml");
+		}
+		else {
+			this.config.loadFromFile(config.submissionDirectory+"\\config.xml");
+		}		
 	}
 	
 	@Override

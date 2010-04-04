@@ -61,6 +61,8 @@ public class Configuration
     public boolean severalSubmissionDirectories;
 
     public String submissionDirectory;
+    
+    public String configFilePath;
 
     public String excludeFiles;
 
@@ -142,6 +144,9 @@ public class Configuration
 	
 	submissionDirectory = 
 	    this.getProperty(prop, "plag.parser.plaggie.submissionDirectory");
+	
+	configFilePath = 
+	    this.getProperty(prop, "plag.parser.plaggie.configFilePath");
 
 	excludeFiles = 
 	    this.getProperty(prop, "plag.parser.plaggie.excludeFiles");

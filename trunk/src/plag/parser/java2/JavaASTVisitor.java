@@ -8,11 +8,14 @@ import japa.parser.ast.expr.VariableDeclarationExpr;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.ForStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+import plag.parser.java2.*;
+import plag.parser.java2.tokens.MethodInvocationToken;
 
 public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 
 	private SourceFileReader sfr;
 	private TokenizationConfig config;
+	private int tokenMarker;
 
 	public JavaASTVisitor(SourceFileReader sfr, TokenizationConfig config) {
 		this.sfr = sfr;
@@ -21,20 +24,37 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 
 	public void visit(ForStmt n, TokenList arg) {
 
-		Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
-				sfr.getCharPos(n.getBeginLine() - 1, n.getBeginColumn() - 1), 
-				sfr.getCharPos(n.getEndLine() - 1, n.getEndColumn() - 1), "FOR",
-				10);
-		arg.addToken(tok);
-
+		if(config.methodPairing){
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()), "FOR",
+					JavaTokenizer.FOR, tokenMarker);
+			arg.addToken(tok);			
+		}
+		else {
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()), "FOR",
+					JavaTokenizer.FOR);
+			arg.addToken(tok);
+		}
+		
 		super.visit(n, arg);
-
-		/*
-		 * Token tok2 = new SimpleToken(n.getBeginLine(), n.getEndLine(),
-		 * t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
-		 * t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1, "FOR_END",
-		 * MyTokens.FOR_END); arg.addToken(tok2);
-		 */
+		
+		if(config.methodPairing){
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()), "FOR_END",
+					JavaTokenizer.FOR_END, tokenMarker);
+			arg.addToken(tok);			
+		}
+		else {
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()), "FOR_END",
+					JavaTokenizer.FOR_END);
+			arg.addToken(tok);
+		}
 	}
 
 	public void visit(BlockStmt n, TokenList arg) {
@@ -44,9 +64,9 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 		 * t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
 		 * t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,"BLOCK",
 		 * MyTokens.BLOCK); arg.addToken(tok);
-		 * 
-		 * super.visit(n, arg);
-		 * 
+		 */ 
+		 super.visit(n, arg);
+		 /* 
 		 * Token tok2 = new SimpleToken(n.getBeginLine(), n.getEndLine(),
 		 * t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
 		 * t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1, "BLOCK_END",
@@ -78,31 +98,84 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 	}
 
 	public void visit(MethodDeclaration n, TokenList arg) {
-		/*
-		 * Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(),
-		 * t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
-		 * t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
-		 * "METHOD_DECLARATION", MyTokens.METHOD_DECLARATION);
-		 * arg.addToken(tok);
-		 * 
-		 * super.visit(n, arg);
-		 * 
-		 * Token tok2 = new SimpleToken(n.getBeginLine(), n.getEndLine(),
-		 * t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
-		 * t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1,
-		 * "METHOD_DECLARATION_END", MyTokens.METHOD_DECLARATION_END);
-		 * arg.addToken(tok2);
-		 */
+		
+		if(config.methodPairing) {
+			if(config.methodList.contains(n.getName())){
+				for (int i = 0; i < config.methodList.size(); i++) {
+					if(config.methodList.get(i).equals(n.getName())){
+						tokenMarker = i+1;
+						break;
+					}
+				}
+			}
+			
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(),
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()),
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+			"METHOD_DECLARATION", JavaTokenizer.METHOD_DECLARATION, tokenMarker);
+			arg.addToken(tok);
+		}
+		else {
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(),
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()),
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+			"METHOD_DECLARATION", JavaTokenizer.METHOD_DECLARATION);
+			arg.addToken(tok);
+		}
+		
+		super.visit(n, arg);
+		
+		if (config.methodPairing) {
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+					"METHOD_DECLARATION_END", JavaTokenizer.METHOD_DECLARATION_END,
+					tokenMarker);
+			arg.addToken(tok);
+		} else {
+			Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+					sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+					sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+					"METHOD_DECLARATION_END", JavaTokenizer.METHOD_DECLARATION_END);
+			arg.addToken(tok);
+		}
+		
+		tokenMarker = 0;
 	}
 
 	public void visit(MethodCallExpr n, TokenList arg) {
-		/*
-		 * Token tok = new MethodInvocationToken(n.getBeginLine(),
-		 * n.getEndLine(), t.lineStarts[n.getBeginLine() - 1] +
-		 * n.getBeginColumn()-1, t.lineStarts[n.getEndLine() - 1] +
-		 * n.getEndColumn()-1, "METHOD_INVOCATION", MyTokens.METHOD_INVOCATION);
-		 * arg.addToken(tok);
-		 */
+		
+		if(config.methodPairing){
+			if(config.methodInvocationName){
+				Token tok = new MethodInvocationToken(n.getBeginLine(), n.getEndLine(), 
+						sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+						sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+						"METHOD_INVOCATION", n.getName(), tokenMarker);
+				arg.addToken(tok);
+			}
+			else{
+				Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+						sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+						sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+						"METHOD_INVOCATION", JavaTokenizer.METHOD_INVOCATION, tokenMarker);
+				arg.addToken(tok);
+			}
+		}
+		else {
+			if(config.methodInvocationName){
+				Token tok = new MethodInvocationToken(n.getBeginLine(), n.getEndLine(), 
+						sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+						sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+						"METHOD_INVOCATION", n.getName());
+				arg.addToken(tok);
+			}
+			else{
+				Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), 
+						sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()), 
+						sfr.getCharPos(n.getEndLine(), n.getEndColumn()),
+						"METHOD_INVOCATION", JavaTokenizer.METHOD_INVOCATION);
+				arg.addToken(tok);
+			}
+		}
 	}
-
 }

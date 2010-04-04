@@ -612,6 +612,7 @@ public class Plaggie
 	    // -- Get the directory(or file) names given as command
 	    // -- line parameters
 	    File file1 = new File(args[argc]);
+	    config.configFilePath = args[argc];
 	    argc++;
 	    File file2 = null;
 	    if (args.length > argc) {

@@ -96,11 +96,11 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	
 	public void visit(MethodCallExpr n, TokenList arg){
 		
-		Token tok = new MethodInvocationToken(n.getBeginLine(), n.getEndLine(),
+		/*Token tok = new MethodInvocationToken(n.getBeginLine(), n.getEndLine(),
 				t.lineStarts[n.getBeginLine() - 1] + n.getBeginColumn()-1,
 				t.lineStarts[n.getEndLine() - 1] + n.getEndColumn()-1, "METHOD_INVOCATION",
 				 MyTokens.METHOD_INVOCATION);
-		arg.addToken(tok);
+		arg.addToken(tok);*/
 	}
 	
 }
