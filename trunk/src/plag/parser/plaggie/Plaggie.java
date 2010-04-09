@@ -24,6 +24,7 @@ import plag.parser.*;
 import plag.parser.java.*;
 import plag.parser.report.*;
 
+import java.sql.Time;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.ArrayList;
@@ -130,13 +131,18 @@ public class Plaggie
 		}
 	    }
 	    else {
-		Debug.println("Adding single file submission: "+files[i].getPath());
-		SingleFileSubmission sub = new SingleFileSubmission(files[i]);
-		submissions.add(sub);
-		Stats.addToDistribution("files_in_submission",1.0);
-		Stats.incCounter("submissions");
-		
-	    }
+	    	if ((files[i].getName().length() > 4) && (files[i].getName().substring(files[i].getName().length()-4).toLowerCase().equals(".xml"))) {
+	    		Stats.incCounter("files_excluded_by_filename_filter");
+	    	}
+	    	else{	
+	    		Debug.println("Adding single file submission: "+files[i].getPath());
+	    		SingleFileSubmission sub = new SingleFileSubmission(files[i]);
+	    		submissions.add(sub);
+	    		Stats.addToDistribution("files_in_submission",1.0);
+	    		Stats.incCounter("submissions");
+	    	}
+	    	}
+	    
 	}
 	System.out.println("...DONE");
 
@@ -314,8 +320,10 @@ public class Plaggie
 	    }
 	}
 	//timer.cancel();
+	final Date endTime = new Date();
 	System.out.println();
 	System.out.println("Ending time: "+(new Date()));
+	System.out.println("Elapsed time: "+(endTime.getTime()-startTime.getTime())+" ms");
 	System.out.println();
 	Stats.print(System.out);
 
