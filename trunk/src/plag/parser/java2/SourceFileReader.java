@@ -10,10 +10,13 @@ public class SourceFileReader {
 	
 	private int[] lineStarts = null;
 	
-	private ArrayList<String> lines = new ArrayList<String>();;
+	private ArrayList<String> lines = new ArrayList<String>();
+	
+	private File sourceFile;
 	
 	public SourceFileReader(File sourceFile) throws FileNotFoundException {
-		BufferedReader r = new BufferedReader(new FileReader(sourceFile));
+		this.sourceFile = sourceFile;
+		BufferedReader r = new BufferedReader(new FileReader(this.sourceFile));
 		try {
 			String line;
 			while ((line = r.readLine()) != null) 
@@ -40,5 +43,30 @@ public class SourceFileReader {
 	
 	public int getCharPos(int line, int column) {
 		return lineStarts[line-1]+column-1;
+	}
+	
+	public String getContent(int fromCharPos, int toCharPos){
+		
+		String content = "";
+		try {
+			FileReader reader = new FileReader(sourceFile);
+			int counter=0;
+			while(counter <fromCharPos){
+				reader.read();
+				counter++;
+			}			
+			
+			for(int i = fromCharPos; i<=toCharPos; i++)
+				content+=reader.read();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return content;
+		
+		
 	}
 }
