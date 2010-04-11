@@ -26,7 +26,8 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 	}
 	
 	public void visit(ForStmt n, TokenList arg) {
-
+		System.out.println("FRiadok " + n.getBeginLine());
+		System.out.println("FStlpec " + n.getBeginColumn());
 		
 		
 		Token tok = new Token(n.getBeginLine(), n.getEndLine(),
@@ -112,8 +113,8 @@ public class MyVisitor extends VoidVisitorAdapter<TokenList> {
 				MyTokens.METHOD_DECLARATION);
 		arg.addToken(tok);
 		
-		System.out.println("Riadok " + n.getBeginLine());
-		System.out.println("Stlpec " + n.getBeginColumn());
+		System.out.println("MRiadok " + n.getBeginLine());
+		System.out.println("MStlpec " + n.getBeginColumn());
 		metody.add(n);
 		
 		if (vnarajDoMetod)
