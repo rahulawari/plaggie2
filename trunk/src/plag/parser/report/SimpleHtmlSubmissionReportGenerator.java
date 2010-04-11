@@ -23,6 +23,8 @@ package plag.parser.report;
 import java.io.*;
 import java.util.*;
 import plag.parser.*;
+import plag.parser.java2.SourceFileReader;
+
 import java.text.NumberFormat;
 
 
@@ -479,32 +481,6 @@ public class SimpleHtmlSubmissionReportGenerator
 	return s;
     }
 
-    /**
-     * Generates a StringBuffer of the lines read from the given
-     * buffered reader.
-     */
-    private StringBuffer getChars(BufferedReader br) 
-	throws IOException 
-    {
-
-	StringBuffer fileContents = new StringBuffer(10000);
-	
-	int fileChar;
-	while ( (fileChar = br.read()) != -1) {
-	    fileContents.append((char)fileChar);
-	}
-	br.close();
-	return fileContents;
-    }
-
-    /**
-     * Returns the substring in chars starting from leftChar and
-     * ending at rightChar
-     */
-    private String getChars(int leftChar, int rightChar, StringBuffer chars)
-    {
-	return chars.substring(leftChar, rightChar+1);
-    }
 
     /**
      * Prints the tokens and the associated code specified in the
@@ -523,9 +499,10 @@ public class SimpleHtmlSubmissionReportGenerator
 
 	out.println("<CODE><PRE>");
 
-	StringBuffer fileContents = getChars(br);
-	Iterator iter = tokens.iterator();
+	SourceFileReader sfr = new SourceFileReader(br);
 	
+	Iterator iter = tokens.iterator();
+
 	int count = 0;
 
 	while (iter.hasNext()) {
@@ -552,11 +529,11 @@ public class SimpleHtmlSubmissionReportGenerator
 		/* Print multiLineThreshold number of lines */
 		if (lineLeft == lineRight) {
 		    ps += createEmptyString(COL_LENGTH - ps.length());
-		    ps += txt2html(getChars(leftChar, rightChar, fileContents))+separator;
+		    ps += txt2html(sfr.getContent(leftChar, rightChar))+separator;
 		    out.print(ps);
 		}
 		else {
-		    String s = getChars(leftChar, rightChar, fileContents);
+		    String s = sfr.getContent(leftChar, rightChar);
 		    int curCount = 0;
 		    int start = 0;
 		    int end = s.indexOf("\n");

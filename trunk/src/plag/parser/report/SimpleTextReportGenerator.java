@@ -21,6 +21,7 @@
 package plag.parser.report;
 
 import plag.parser.*;
+import plag.parser.java2.SourceFileReader;
 
 import java.io.PrintStream;
 import java.io.BufferedReader;
@@ -93,33 +94,6 @@ public class SimpleTextReportGenerator
     }
     
     /**
-     * Generates a StringBuffer of the lines read from the given
-     * buffered reader.
-     */
-    private StringBuffer getChars(BufferedReader br) 
-	throws IOException 
-    {
-
-	StringBuffer fileContents = new StringBuffer(10000);
-	
-	String line;
-	while ( (line = br.readLine()) != null) {
-	    fileContents.append(line+"\n");
-	}
-	br.close();
-	return fileContents;
-    }
-    
-    /**
-     * Returns the substring in chars starting from leftChar and
-     * ending at rightChar
-     */
-    private String getChars(int leftChar, int rightChar, StringBuffer chars)
-    {
-	return chars.substring(leftChar, rightChar+1);
-    }
-
-    /**
      * Returns a string of space-characters.
      */
     private String createEmptyString(int l) {
@@ -139,7 +113,7 @@ public class SimpleTextReportGenerator
 	throws IOException 
     {
 
-	StringBuffer fileContents = getChars(br);
+	SourceFileReader sfr = new SourceFileReader(br);
 	Iterator iter = tokens.iterator();
 	
 	int count = 0;
@@ -165,11 +139,11 @@ public class SimpleTextReportGenerator
 		/* Print multiLineThreshold number of lines */
 		if (lineLeft == lineRight) {
 		    ps += createEmptyString(COL_LENGTH - ps.length());
-		    ps += getChars(leftChar, rightChar, fileContents)+separator;
+		    ps += sfr.getContent(leftChar, rightChar)+separator;
 		    out.print(ps);
 		}
 		else {
-		    String s = getChars(leftChar, rightChar, fileContents);
+		    String s = sfr.getContent(leftChar, rightChar);
 		    int curCount = 0;
 		    int start = 0;
 		    int end = s.indexOf("\n");

@@ -1,17 +1,13 @@
 package plag.parser.java2;
 
 import plag.parser.*;
-import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
-import japa.parser.ast.expr.AssignExpr;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.VariableDeclarationExpr;
-import japa.parser.ast.stmt.BlockStmt;
-import japa.parser.ast.stmt.ForStmt;
-import japa.parser.ast.stmt.IfStmt;
+import japa.parser.ast.*;
+import japa.parser.ast.body.*;
+import japa.parser.ast.expr.*;
+import japa.parser.ast.stmt.*;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import plag.parser.java2.*;
-import plag.parser.java2.tokens.MethodInvocationToken;
+import plag.parser.java2.tokens.*;
 
 public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 
