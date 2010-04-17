@@ -529,20 +529,21 @@ public class SimpleHtmlSubmissionReportGenerator
 		/* Print multiLineThreshold number of lines */
 		if (lineLeft == lineRight) {
 		    ps += createEmptyString(COL_LENGTH - ps.length());
-		    ps += txt2html(sfr.getContent(leftChar, rightChar))+separator;
+		    //ps += txt2html(sfr.getContent(leftChar, rightChar))+separator;
+		    ps += txt2html(sfr.getContent(leftChar, rightChar));
 		    out.print(ps);
 		}
 		else {
 		    String s = sfr.getContent(leftChar, rightChar);
 		    int curCount = 0;
 		    int start = 0;
-		    int end = s.indexOf("\n");
+		    int end = s.indexOf("\n");		    
 		    // First line:
 		    ps += createEmptyString(COL_LENGTH - ps.length());
 		    ps += txt2html(s.substring(start, end))+separator;
 		    out.print(ps);
 		    
-		    start = end+1;
+		    /*start = end+1;
 		    curCount++;
 		    while ((curCount < multiLineThreshold) && 
 			   ( (end = s.indexOf("\n",start)) != -1)) {
@@ -553,7 +554,7 @@ public class SimpleHtmlSubmissionReportGenerator
 		    // Print the remaining characters
 		    if (curCount < multiLineThreshold) {
 			out.print(createEmptyString(COL_LENGTH)+PRE_MULTILINE+txt2html(s.substring(start))+separator);
-		    }
+		    }*/
 		}
 	    }
 	    else {
