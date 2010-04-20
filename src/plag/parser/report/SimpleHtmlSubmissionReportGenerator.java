@@ -543,7 +543,7 @@ public class SimpleHtmlSubmissionReportGenerator
 		    ps += txt2html(s.substring(start, end))+separator;
 		    out.print(ps);
 		    
-		    /*start = end+1;
+		    start = end+1;
 		    curCount++;
 		    while ((curCount < multiLineThreshold) && 
 			   ( (end = s.indexOf("\n",start)) != -1)) {
@@ -554,7 +554,7 @@ public class SimpleHtmlSubmissionReportGenerator
 		    // Print the remaining characters
 		    if (curCount < multiLineThreshold) {
 			out.print(createEmptyString(COL_LENGTH)+PRE_MULTILINE+txt2html(s.substring(start))+separator);
-		    }*/
+		    }
 		}
 	    }
 	    else {
