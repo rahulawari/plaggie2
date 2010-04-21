@@ -5,6 +5,9 @@ import japa.parser.ast.*;
 import japa.parser.ast.body.*;
 import japa.parser.ast.expr.*;
 import japa.parser.ast.stmt.*;
+import japa.parser.ast.type.PrimitiveType;
+import japa.parser.ast.type.ReferenceType;
+import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import plag.parser.java2.*;
 import plag.parser.java2.tokens.*;
@@ -14,7 +17,8 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 	private SourceFileReader sfr;
 	private TokenizationConfig config;
 	private int tokenMarker;
-
+	private boolean voidMethod;
+	
 	public JavaASTVisitor(SourceFileReader sfr, TokenizationConfig config) {
 		this.sfr = sfr;
 		this.config = config;
@@ -80,6 +84,9 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 	
 	public void visit(MethodDeclaration n, TokenList arg) {
 
+		if(n.getType().toString().equals("void"))
+			voidMethod = true;
+			
 		if (config.methodPairing) 
 			if (config.methodList.contains(n.getName())) 
 				for (int i = 0; i < config.methodList.size(); i++) 
@@ -97,6 +104,9 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 
 		super.visit(n, arg);
 
+		if(voidMethod && arg.getToken(arg.size()-1).getTokenCategory().equals("RETURN")) {
+			arg.removeToken(arg.size()-1);	
+		}
 		Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
 				.getCharPos(n.getEndLine(), n.getEndColumn()), sfr.getCharPos(n
 				.getEndLine(), n.getEndColumn()), "METHOD_DECLARATION_END",
@@ -104,12 +114,13 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 		arg.addToken(tok2);
 
 		tokenMarker = 0;
+		voidMethod = false;
 	}
 
 	public void visit(BlockStmt n, TokenList arg) {
 
 		if (!arg.getToken(arg.size() - 1).getTokenCategory().equals("METHOD_DECLARATION")) {
-			if (n.getStmts().size() > 1) {
+			if (config.plagiarismProtection && n.getStmts().size() > 1) {
 				Token tok = new SimpleToken(n.getBeginLine(), n.getBeginLine(),
 						sfr.getCharPos(n.getBeginLine(), n.getBeginColumn()),
 						sfr.getCharPos(n.getBeginLine(), sfr.getLine(n.getBeginLine()).length() + n.getBeginColumn()),
@@ -126,25 +137,59 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 			}
 		}
 
-		else
-			super.visit(n, arg);
+		super.visit(n, arg);
 	}
 
 	public void visit(ForStmt n, TokenList arg) {
 
-		Token tok = new SimpleToken(n.getBeginLine(), n.getBeginLine(), sfr
+		if(!config.plagiarismProtection){
+			Token tok = new SimpleToken(n.getBeginLine(), n.getBeginLine(), sfr
 				.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
 				.getCharPos(n.getBeginLine(), sfr.getLine(n.getBeginLine()).length()+n.getBeginColumn()), "FOR",
 				JavaTokenizer.FOR, tokenMarker);
-		arg.addToken(tok);
+			arg.addToken(tok);
 
-		super.visit(n, arg);
+			super.visit(n, arg);
 
-		Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
+			Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
 				.getCharPos(n.getEndLine(), n.getEndColumn()), sfr.getCharPos(n
 				.getEndLine(), n.getEndColumn()), "FOR_END",
 				JavaTokenizer.FOR_END, tokenMarker);
-		arg.addToken(tok2);
+			arg.addToken(tok2);
+			}
+		
+		else {
+			if (n.getInit() != null) {
+	            for (Expression e : n.getInit()) {
+	                e.accept(this, arg);
+	            }
+	        }
+			
+			Token tok = new SimpleToken(n.getBeginLine(), n.getBeginLine(), sfr
+					.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
+					.getCharPos(n.getBeginLine(), sfr.getLine(n.getBeginLine()).length()+n.getBeginColumn()), "WHILE",
+					JavaTokenizer.WHILE, tokenMarker);
+			arg.addToken(tok);
+
+			if (n.getCompare() != null) {
+	            n.getCompare().accept(this, arg);
+	        }
+			
+			n.getBody().accept(this, arg);			
+			
+			if (n.getUpdate() != null) {
+	            for (Expression e : n.getUpdate()) {
+	                e.accept(this, arg);
+	            }
+	        }
+			
+			Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
+					.getCharPos(n.getEndLine(), n.getEndColumn()), sfr.getCharPos(n
+					.getEndLine(), n.getEndColumn()), "WHILE_END",
+					JavaTokenizer.WHILE_END, tokenMarker);
+			arg.addToken(tok2);
+			
+		}
 	}
 	
 	public void visit(WhileStmt n, TokenList arg) {
@@ -163,6 +208,23 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 				JavaTokenizer.WHILE_END, tokenMarker);
 		arg.addToken(tok2);
 	
+	}
+	
+	public void visit(DoStmt n, TokenList arg) {
+		
+		Token tok = new SimpleToken(n.getBeginLine(), n.getBeginLine(), sfr
+				.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
+				.getCharPos(n.getBeginLine(), sfr.getLine(n.getBeginLine()).length()+n.getBeginColumn()), "DO",
+				JavaTokenizer.DO, tokenMarker);
+		arg.addToken(tok);
+
+		super.visit(n, arg);
+
+		Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
+				.getCharPos(n.getEndLine(), n.getEndColumn()), sfr.getCharPos(n
+				.getEndLine(), n.getEndColumn()), "DO_END",
+				JavaTokenizer.DO_END, tokenMarker);
+		arg.addToken(tok2);
 	}
 	
 	public void visit(UnaryExpr n, TokenList arg) {
@@ -254,5 +316,39 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 		arg.addToken(tok);
 
 		super.visit(n, arg);
+	}
+	
+	public void visit(ReturnStmt n, TokenList arg) {
+		
+		Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), sfr
+				.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
+				.getCharPos(n.getEndLine(), n.getEndColumn()), "RETURN",
+				JavaTokenizer.RETURN, tokenMarker);
+		arg.addToken(tok);
+
+		super.visit(n, arg);
+	}
+	
+	public void visit(BreakStmt n, TokenList arg) {
+		
+		Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), sfr
+				.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
+				.getCharPos(n.getEndLine(), n.getEndColumn()), "BREAK",
+				JavaTokenizer.BREAK, tokenMarker);
+		arg.addToken(tok);
+
+		super.visit(n, arg);
+    }
+	
+	public void visit(FieldDeclaration n, TokenList arg) {
+		Token tok = new SimpleToken(n.getBeginLine(), n.getEndLine(), sfr
+				.getCharPos(n.getBeginLine(), n.getBeginColumn()), sfr
+				.getCharPos(n.getEndLine(), n.getEndColumn()),
+				"VARIABLE_DECLARATION", JavaTokenizer.VARIABLE_DECLARATION,
+				tokenMarker);
+		arg.addToken(tok);
+
+		super.visit(n, arg);
+		
 	}
 }
