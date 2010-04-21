@@ -18,7 +18,8 @@ public class TokenizationConfig {
     public boolean methodInvocationName;
     public boolean methodInvocationObject;
     public boolean methodPairing;
-    public List<String> methodList;
+    public boolean plagiarismProtection;
+    public List<String> methodList;    
     public File file;
     
     public void loadFromFile(String path) {
@@ -39,6 +40,9 @@ public class TokenizationConfig {
 	                        
 	            NodeList mio = doc.getElementsByTagName("methodInvocationObject");
 	            methodInvocationObject = Boolean.parseBoolean(mio.item(0).getFirstChild().getNodeValue());
+	            
+	            NodeList pp = doc.getElementsByTagName("plagiarismProtection");
+	            plagiarismProtection = Boolean.parseBoolean(pp.item(0).getFirstChild().getNodeValue());
 	            
 	            NodeList mp = doc.getElementsByTagName("methodPairing");
 	            methodPairing = Boolean.parseBoolean(mp.item(0).getFirstChild().getNodeValue());
