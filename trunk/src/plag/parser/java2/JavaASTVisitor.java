@@ -104,9 +104,10 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 
 		super.visit(n, arg);
 
-		if(voidMethod && arg.getToken(arg.size()-1).getTokenCategory().equals("RETURN")) {
+		if(config.plagiarismProtection && voidMethod && arg.getToken(arg.size()-1).getTokenCategory().equals("RETURN")) {
 			arg.removeToken(arg.size()-1);	
 		}
+		
 		Token tok2 = new SimpleToken(n.getEndLine(), n.getEndLine(), sfr
 				.getCharPos(n.getEndLine(), n.getEndColumn()), sfr.getCharPos(n
 				.getEndLine(), n.getEndColumn()), "METHOD_DECLARATION_END",
@@ -280,6 +281,11 @@ public class JavaASTVisitor extends VoidVisitorAdapter<TokenList> {
 					.getCharPos(n.getElseStmt().getBeginLine(), sfr.getLine(n.getElseStmt().getBeginLine()).indexOf('e')+3),
 					"ELSE", JavaTokenizer.ELSE,
 					tokenMarker);
+	    	/*Token tok3 = new SimpleToken(n.getThenStmt().getEndLine()+1, n.getElseStmt().getBeginLine()-1, sfr
+			.getCharPos(n.getThenStmt().getEndLine()+1, n.getThenStmt().getEndColumn()), sfr
+			.getCharPos(n.getElseStmt().getBeginLine(), n.getElseStmt().getBeginColumn()),
+			"ELSE", JavaTokenizer.ELSE,
+			tokenMarker);*/
 	    	arg.addToken(tok3);
 	    	
 	        n.getElseStmt().accept(this, arg);
