@@ -95,4 +95,8 @@ public class TokenList implements Serializable {
 	public String toString() {
 		return this.name;
 	}
+	
+	public void removeToken(int index){
+		tokens.remove(index);
+	}
 }
