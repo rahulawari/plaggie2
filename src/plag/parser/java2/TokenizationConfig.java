@@ -12,13 +12,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
-
+/**
+ * Trieda na nacitanie vlastnosti tokenizacie v konfiguracnom XML subore
+ * 
+ */
 public class TokenizationConfig {
     
     public boolean methodInvocationName;
     public boolean methodPairing;
-    public boolean plagiarismProtection;
-    public List<String> methodList;    
+    public List<String> methodList;
+    public boolean returnInVoid;
+    public boolean emptyElse;
+    public boolean forToWhile;
     public File file;
     
     public void loadFromFile(String path) {
@@ -36,10 +41,7 @@ public class TokenizationConfig {
 	            
 	            NodeList min = doc.getElementsByTagName("methodInvocationName");            
 	            methodInvocationName = Boolean.parseBoolean(min.item(0).getFirstChild().getNodeValue());
-	            	              
-	            NodeList pp = doc.getElementsByTagName("plagiarismProtection");
-	            plagiarismProtection = Boolean.parseBoolean(pp.item(0).getFirstChild().getNodeValue());
-	            
+	                            
 	            NodeList mp = doc.getElementsByTagName("methodPairing");
 	            methodPairing = Boolean.parseBoolean(mp.item(0).getFirstChild().getNodeValue());
 	            
@@ -48,6 +50,16 @@ public class TokenizationConfig {
 	            for (int i = 0; i < ml.getLength(); i++) {
 	                methodList.add(ml.item(i).getFirstChild().getNodeValue());
 	            }  
+	            
+	            NodeList rin = doc.getElementsByTagName("returnInVoid");
+	            returnInVoid = Boolean.parseBoolean(rin.item(0).getFirstChild().getNodeValue());
+	           
+	            NodeList ee = doc.getElementsByTagName("emptyElse");
+	            emptyElse = Boolean.parseBoolean(ee.item(0).getFirstChild().getNodeValue());
+	            
+	            
+	            NodeList forWhile = doc.getElementsByTagName("forToWhile");
+	            forToWhile = Boolean.parseBoolean(forWhile.item(0).getFirstChild().getNodeValue());
         	}
         } catch (Exception e) {
             e.printStackTrace();

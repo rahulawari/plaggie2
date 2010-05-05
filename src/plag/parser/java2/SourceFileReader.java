@@ -14,8 +14,7 @@ public class SourceFileReader {
 	private ArrayList<String> lines = new ArrayList<String>();
 
 	public SourceFileReader(File sourceFile) throws FileNotFoundException {
-		this(new BufferedReader(new FileReader(sourceFile)));
-		System.out.println("Meno suboru: "+ sourceFile.getPath());
+		this(new BufferedReader(new FileReader(sourceFile)));		
 	}
 
 	public SourceFileReader(BufferedReader reader) {
