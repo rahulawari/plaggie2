@@ -1,0 +1,1 @@
+Plaggie is a stand-alone source code plagiarism detection engine purposed for Java programming exercises. It is specialized for typical outcomes of programming exercises: small files based on a template.
